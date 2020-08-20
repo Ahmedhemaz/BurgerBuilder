@@ -3,6 +3,8 @@ import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import AddIngredientContext from '../../context/addIngredient-context';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENTS_PRICING = {
     salad: 0.5,
@@ -20,6 +22,7 @@ class BurgerBuilder extends Component{
             meat: 0,
         },
         totalPrice: 0,
+        purchasing:false,
     }
 
     addIngredientsHandler(type) {
@@ -47,16 +50,30 @@ class BurgerBuilder extends Component{
         this.setState({ingredients: updatedIngredients, totalPrice: newTotalPrice});
     }
 
+    purchaseHandler(){
+        this.setState({purchasing: true});
+    }
+
     render(){
         const disableRemoveIngredientsInfo = {...this.state.ingredients};
         return (
             <Aux>
+                { /**display modal on Order now click */
+                 this.state.purchasing?
+                  <Modal>
+                     <OrderSummary ingredients = {this.state.ingredients}/>
+                  </Modal>: null 
+                }
+
                 <Burger ingredients={this.state.ingredients} />
                 <AddIngredientContext.Provider value = {{
                     addIngredients: (type)=> this.addIngredientsHandler(type),
                     removeIngredients: (type)=> this.removeIngredientHandler(type),
                     disableRemoveIngredientsInfo: disableRemoveIngredientsInfo}}>
-                    <BuildControls totalPrice = {this.state.totalPrice}/>
+                    <BuildControls 
+                        totalPrice = {this.state.totalPrice}
+                        ordered = {()=> this.purchaseHandler()}
+                    />
                 </AddIngredientContext.Provider>
             </Aux>
         )
