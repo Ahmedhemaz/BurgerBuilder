@@ -38,7 +38,7 @@ class BurgerBuilder extends Component{
         return (
             <Aux>
                 <Burger ingredients={this.state.ingredients} />
-                <AddIngredientContext.Provider value = {{addIngredients: this.addIngredientsHandler.bind(this)}}>
+                <AddIngredientContext.Provider value = {{addIngredients: (type)=> this.addIngredientsHandler(type)}}>
                     <BuildControls/>
                 </AddIngredientContext.Provider>
             </Aux>
