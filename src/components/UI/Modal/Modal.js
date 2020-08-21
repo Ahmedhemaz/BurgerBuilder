@@ -1,9 +1,14 @@
 import React from 'react';
 import classes from './Modal.module.css';
+import Aux from '../../../hoc/Aux';
+import Backdrop from '../Backdrop/Backdrop';
 const modal = (props)=> (
-    <div className = {classes.Modal}>
-        {props.children}
-    </div>
+    <Aux>
+        <Backdrop show={props.show}/>
+        <div className = {classes.Modal}>
+            {props.children}
+        </div>
+    </Aux>
 );
 
 export default modal;
