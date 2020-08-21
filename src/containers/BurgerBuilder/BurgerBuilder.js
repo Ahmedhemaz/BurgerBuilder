@@ -73,7 +73,6 @@ class BurgerBuilder extends Component{
                  </BackdropContext.Provider>
                   : null 
                 }
-
                 <Burger ingredients={this.state.ingredients} />
                 <AddIngredientContext.Provider value = {{
                     addIngredients: (type)=> this.addIngredientsHandler(type),
