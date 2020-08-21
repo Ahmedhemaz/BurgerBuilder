@@ -1,7 +1,8 @@
 import React from 'react';
 
 const backdropContext = React.createContext({
-    closeModal: ()=>{}
+    close: ()=>{},
+    continue: ()=>{}
 });
 
 export default backdropContext;

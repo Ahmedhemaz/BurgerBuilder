@@ -1,5 +1,8 @@
 import React from 'react';
 import Aux from '../../../hoc/Aux';
+import Button from '../../UI/Button/Button';
+import ModalContext from '../../../context/modal-context';
+
 
 const orderSummary = (props) => {
     const ingredientsSummary = Object.keys(props.ingredients)
@@ -14,7 +17,17 @@ const orderSummary = (props) => {
             <ul>
                 {ingredientsSummary}
             </ul>
-            <strong>Continue to checkout</strong>
+            <ModalContext.Consumer>
+                {
+                    context => {return (
+                        <Aux>
+                            <Button btnType = "Danger"  clicked = {context.close}>CANCEL</Button>
+                            <Button btnType = "Success" clicked = {context.continue}>CONTINUE</Button>
+                        </Aux>
+                    )}
+                }
+            </ModalContext.Consumer>
+            
         </Aux>
     )
 }

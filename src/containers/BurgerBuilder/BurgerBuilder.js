@@ -3,7 +3,7 @@ import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import AddIngredientContext from '../../context/addIngredient-context';
-import BackdropContext from '../../context/backdrop-context';
+import ModalContext from '../../context/modal-context';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
@@ -56,8 +56,11 @@ class BurgerBuilder extends Component{
     }
 
     purchaseCancelHandler() {
-        console.log('clicked');
         this.setState({purchasing: false});
+    }
+
+    purchaseContinueHandler() {
+        alert('GO TO VALHALA');
     }
 
     render(){
@@ -66,11 +69,13 @@ class BurgerBuilder extends Component{
             <Aux>
                 { /**display modal on Order now click */
                  this.state.purchasing?
-                 <BackdropContext.Provider value = {{closeModal: ()=> this.purchaseCancelHandler()}}>
-                     <Modal show = {this.state.purchasing}>
-                     <OrderSummary ingredients = {this.state.ingredients}/>
-                  </Modal>
-                 </BackdropContext.Provider>
+                 <ModalContext.Provider value = {{
+                     close: ()=> this.purchaseCancelHandler(),
+                     continue: ()=> this.purchaseContinueHandler()}}>
+                    <Modal show = {this.state.purchasing}>
+                       <OrderSummary ingredients = {this.state.ingredients}/>
+                    </Modal>
+                 </ModalContext.Provider>
                   : null 
                 }
                 <Burger ingredients={this.state.ingredients} />
