@@ -4,7 +4,6 @@ const navigationItem = (props)=>(
     <li className = {classes.NavigationItem}>
         <a href='/' 
             className = {props.active? classes.BtnActive: null}>
-                {console.log(classes.BtnActive)}
             {props.children}
         </a>
     </li>
