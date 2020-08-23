@@ -6,16 +6,22 @@ import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 import ModalContext from '../../context/backDrop-context';
 class Layout extends Component{
     state = {
-        showSideDrawer: true,
+        showSideDrawer: false,
     }
 
     closeSideDrawerHandler() {
         this.setState({showSideDrawer: false});
     }
+
+    sideDrawerToggleHandler() {
+        this.setState((prevState)=>{
+            return {showSideDrawer: !prevState.showSideDrawer}
+        });
+    }
     render() {
         return (
             <Aux>
-                <Toolbar/>
+                <Toolbar drawerToggleClicked={()=> this.sideDrawerToggleHandler()}/>
                 <ModalContext.Provider value={{close: ()=> this.closeSideDrawerHandler()}}>
                     <SideDrawer open={this.state.showSideDrawer}/>
                 </ModalContext.Provider>
