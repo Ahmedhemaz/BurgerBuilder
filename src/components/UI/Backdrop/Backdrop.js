@@ -1,15 +1,15 @@
 import React from 'react';
 import classes from './Backdrop.module.css';
-import ModalContext from '../../../context/modal-context';
+import BackDropContext from '../../../context/backDrop-context';
 
 const backdrop = (props) => (
-    <ModalContext.Consumer>
+    <BackDropContext.Consumer>
         {
             (context) => {
                 return props.show? <div className = {classes.Backdrop} onClick = {context.close}></div>: null
             }
         }
-    </ModalContext.Consumer>
+    </BackDropContext.Consumer>
 );
 
 export default backdrop;

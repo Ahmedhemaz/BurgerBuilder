@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from '../../../hoc/Aux';
 import Button from '../../UI/Button/Button';
-import ModalContext from '../../../context/modal-context';
+import BackDropContext from '../../../context/backDrop-context';
 
 
 const orderSummary = (props) => {
@@ -18,7 +18,7 @@ const orderSummary = (props) => {
                 {ingredientsSummary}
             </ul>
             <p><strong>Total Price: {props.totalPrice.toFixed(2)}</strong></p>
-            <ModalContext.Consumer>
+            <BackDropContext.Consumer>
                 {
                     context => {return (
                         <Aux>
@@ -27,7 +27,7 @@ const orderSummary = (props) => {
                         </Aux>
                     )}
                 }
-            </ModalContext.Consumer>
+            </BackDropContext.Consumer>
             
         </Aux>
     )

@@ -3,7 +3,7 @@ import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import AddIngredientContext from '../../context/addIngredient-context';
-import ModalContext from '../../context/modal-context';
+import BackDropContext from '../../context/backDrop-context';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
@@ -69,13 +69,13 @@ class BurgerBuilder extends Component{
             <Aux>
                 { /**display modal on Order now click */
                  this.state.purchasing?
-                 <ModalContext.Provider value = {{
+                 <BackDropContext.Provider value = {{
                      close: ()=> this.purchaseCancelHandler(),
                      continue: ()=> this.purchaseContinueHandler()}}>
                     <Modal show = {this.state.purchasing}>
                        <OrderSummary ingredients = {this.state.ingredients} totalPrice = {this.state.totalPrice}/>
                     </Modal>
-                 </ModalContext.Provider>
+                 </BackDropContext.Provider>
                   : null 
                 }
                 <Burger ingredients={this.state.ingredients} />
