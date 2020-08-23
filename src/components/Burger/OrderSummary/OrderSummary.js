@@ -1,5 +1,5 @@
 import React from 'react';
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../UI/Button/Button';
 import BackDropContext from '../../../context/backDrop-context';
 
@@ -33,4 +33,4 @@ const orderSummary = (props) => {
     )
 }
 
-export default orderSummary;
+export default React.memo(orderSummary);
