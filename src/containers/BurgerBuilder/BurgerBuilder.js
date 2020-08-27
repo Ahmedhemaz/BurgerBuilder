@@ -6,6 +6,7 @@ import AddIngredientContext from '../../context/addIngredient-context';
 import BackDropContext from '../../context/backDrop-context';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
 
 const INGREDIENTS_PRICING = {
     salad: 0.5,
@@ -60,7 +61,24 @@ class BurgerBuilder extends Component{
     }
 
     purchaseContinueHandler() {
-        alert('GO TO VALHALA');
+        // alert('GO TO VALHALA');
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Ahmed',
+                address: {
+                    street: 'VALHALA',
+                    zipCode: '53425',
+                    country: 'el samala7at'
+                },
+                email: 'test@test.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        axios.post('/orders.json', order)
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
     }
 
     render(){
