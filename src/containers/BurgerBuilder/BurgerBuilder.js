@@ -7,6 +7,7 @@ import BackDropContext from '../../context/backDrop-context';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const INGREDIENTS_PRICING = {
     salad: 0.5,
@@ -25,6 +26,7 @@ class BurgerBuilder extends Component{
         },
         totalPrice: 0,
         purchasing:false,
+        loading: false
     }
 
     addIngredientsHandler(type) {
@@ -62,6 +64,7 @@ class BurgerBuilder extends Component{
 
     purchaseContinueHandler() {
         // alert('GO TO VALHALA');
+        this.setState({loading: true});
         const order = {
             ingredients: this.state.ingredients,
             price: this.state.totalPrice,
@@ -77,12 +80,14 @@ class BurgerBuilder extends Component{
             deliveryMethod: 'fastest'
         }
         axios.post('/orders.json', order)
-            .then(response => console.log(response))
-            .catch(error => console.log(error));
+            .then(response => this.setState({loading:false, purchasing: false}))
+            .catch(error => this.setState({loading: false, purchasing: false}));
     }
 
     render(){
         const disableRemoveIngredientsInfo = {...this.state.ingredients};
+        let orderSummary = <OrderSummary ingredients = {this.state.ingredients} totalPrice = {this.state.totalPrice}/>;
+        if(this.state.loading) orderSummary = <Spinner/>
         return (
             <Aux>
                 { /**display modal on Order now click */
@@ -91,7 +96,7 @@ class BurgerBuilder extends Component{
                      close: ()=> this.purchaseCancelHandler(),
                      continue: ()=> this.purchaseContinueHandler()}}>
                     <Modal show = {this.state.purchasing}>
-                       <OrderSummary ingredients = {this.state.ingredients} totalPrice = {this.state.totalPrice}/>
+                       {orderSummary}
                     </Modal>
                  </BackDropContext.Provider>
                   : null 
