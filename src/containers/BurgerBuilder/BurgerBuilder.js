@@ -19,15 +19,22 @@ const INGREDIENTS_PRICING = {
 class BurgerBuilder extends Component{
 
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0,
-        },
+        ingredients: null,
         totalPrice: 0,
         purchasing:false,
-        loading: false
+        loading: false,
+        error: false
+    }
+
+    componentDidMount() {
+        Promise.all([
+            axios.get('https://my-react-burger-2e14e.firebaseio.com/ingredients.json'),
+            axios.get('https://my-react-burger-2e14e.firebaseio.com/totalPrice.json')])
+            .then(values => {
+                this.setState({ingredients: values[0].data, totalPrice: values[1].data})
+            })
+            .catch(() => this.setState({error: true}));
+            
     }
 
     addIngredientsHandler(type) {
@@ -64,7 +71,6 @@ class BurgerBuilder extends Component{
     }
 
     purchaseContinueHandler() {
-        // alert('GO TO VALHALA');
         this.setState({loading: true});
         const order = {
             ingredients: this.state.ingredients,
@@ -87,7 +93,26 @@ class BurgerBuilder extends Component{
 
     render(){
         const disableRemoveIngredientsInfo = {...this.state.ingredients};
-        let orderSummary = <OrderSummary ingredients = {this.state.ingredients} totalPrice = {this.state.totalPrice}/>;
+        let burger = null;
+        let orderSummary = null
+        if(!this.state.ingredients) burger = this.state.error? <p>ingredients can't be loaded</p> :<Spinner/>
+        if(this.state.ingredients) {
+            burger = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients} />;
+                    <AddIngredientContext.Provider value = {{
+                    addIngredients: (type)=> this.addIngredientsHandler(type),
+                    removeIngredients: (type)=> this.removeIngredientHandler(type),
+                    disableRemoveIngredientsInfo: disableRemoveIngredientsInfo}}>
+                    <BuildControls 
+                        totalPrice = {this.state.totalPrice}
+                        ordered = {()=> this.purchaseHandler()}
+                    />
+                </AddIngredientContext.Provider>
+                </Aux>
+            )
+            orderSummary = <OrderSummary ingredients = {this.state.ingredients} totalPrice = {this.state.totalPrice}/>;
+        };
         if(this.state.loading) orderSummary = <Spinner/>
         return (
             <Aux>
@@ -102,16 +127,8 @@ class BurgerBuilder extends Component{
                  </BackDropContext.Provider>
                   : null 
                 }
-                <Burger ingredients={this.state.ingredients} />
-                <AddIngredientContext.Provider value = {{
-                    addIngredients: (type)=> this.addIngredientsHandler(type),
-                    removeIngredients: (type)=> this.removeIngredientHandler(type),
-                    disableRemoveIngredientsInfo: disableRemoveIngredientsInfo}}>
-                    <BuildControls 
-                        totalPrice = {this.state.totalPrice}
-                        ordered = {()=> this.purchaseHandler()}
-                    />
-                </AddIngredientContext.Provider>
+                {burger}
+                
             </Aux>
         )
     }
