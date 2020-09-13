@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../Aux/Aux';
 import BackDropContext from '../../context/backDrop-context';
-const withErrorHandler = (WrapperComponent, axios)=>{
+const withErrorHandler = (WrapperComponent, axios) => {
     return class extends Component {
-        state = {error: null};
+        state = { error: null };
 
         componentDidMount() {
-            this.requestInterceptor = axios.interceptors.request.use(req =>{
-                this.setState({error: null});
+            this.requestInterceptor = axios.interceptors.request.use(req => {
+                this.setState({ error: null });
                 return req;
             })
-            this.responseInterceptor = axios.interceptors.response.use(null, error =>{
-                this.setState({error: error});
+            this.responseInterceptor = axios.interceptors.response.use(null, error => {
+                this.setState({ error: error });
+                return error
             })
         }
 
@@ -20,23 +21,23 @@ const withErrorHandler = (WrapperComponent, axios)=>{
             axios.interceptors.request.eject(this.requestInterceptor);
             axios.interceptors.response.eject(this.responseInterceptor);
         }
-        errorConfirmedHandler(){
-            this.setState({error: null});
+        errorConfirmedHandler() {
+            this.setState({ error: null });
         }
 
-        render(){
+        render() {
             return (
                 <Aux>
                     {
-                      this.state.error?
-                        <BackDropContext.Provider value = {{close: ()=> this.errorConfirmedHandler()}}>
-                            <Modal show={this.state.error}>
-                                {this.state.error? this.state.error.message: null}
-                            </Modal>
-                        </BackDropContext.Provider>:
-                      null
+                        this.state.error ?
+                            <BackDropContext.Provider value={{ close: () => this.errorConfirmedHandler() }}>
+                                <Modal show={this.state.error}>
+                                    {this.state.error ? this.state.error.message : null}
+                                </Modal>
+                            </BackDropContext.Provider> :
+                            null
                     }
-                    <WrapperComponent {...this.props}/>
+                    <WrapperComponent {...this.props} />
                 </Aux>
             )
         }
