@@ -2,15 +2,15 @@ import React from 'react';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
-import PublicRoute from './Routers/PublicRoute';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import PrivateRoute from 'private-route-react';
 function App() {
   return (
     <div >
       <Layout>
         <Switch>
-          <PublicRoute path="/" exact component={BurgerBuilder} />
-          <PublicRoute path="/checkout" component={Checkout} />
+          <Route path="/" exact component={BurgerBuilder} />
+          <PrivateRoute path={'/checkout'} component={Checkout} isAbleToAccessRoute={() => true} redirectPath={'/'} />
         </Switch>
       </Layout>
     </div>
