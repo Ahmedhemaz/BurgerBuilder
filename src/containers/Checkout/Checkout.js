@@ -6,21 +6,26 @@ class Checkout extends Component {
 
     state = {
         ingredients: {
-            salad: 1,
-            bacon: 1,
-            meat: 1,
-            chesse: 1
-        }
+            salad: 0,
+            bacon: 0,
+            meat: 0,
+            chesse: 0
+        },
+        totalPrice: 0
     }
 
     componentDidMount() {
         const query = new URLSearchParams(this.props.location.search);
         const ingredients = {};
+        let price = 0;
         for (let param of query.entries()) {
-            console.log(param);
-            ingredients[param[0]] = +param[1];
+            if (param[0] === 'price') {
+                price = param[1];
+            } else {
+                ingredients[param[0]] = +param[1];
+            }
         }
-        this.setState({ ingredients });
+        this.setState({ ingredients, totalPrice: price });
     }
 
     cancelHandler = () => {
@@ -39,7 +44,8 @@ class Checkout extends Component {
                     cancelCalled={this.cancelHandler}
                     continueCalled={this.continueHandler}
                 />
-                <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
+                <Route path={this.props.match.path + '/contact-data'}
+                    render={() => (<ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} />)} />
             </div>
         )
     }
