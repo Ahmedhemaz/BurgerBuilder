@@ -26,20 +26,19 @@ class Orders extends Component {
             .catch(() => this.setState({ loading: false, error: true }));
     }
     render() {
-        let orders = this.state.orders;
-        console.log(orders);
+        let orders = this.state.orders.map(order => (
+            <Order key={order.id}
+                ingredients={order.ingredients}
+                price={+order.price} />
+        ));
         if (this.state.loading) orders = <Spinner />
         if (this.state.error) orders = <h1>Network Error</h1>
         return (
             <div>
-                {this.state.orders.map(order => (
-                    <Order key={order.id}
-                        ingredients={order.ingredients}
-                        price={+order.price} />
-                ))}
+                {orders}
             </div>
         )
     }
 }
 
-export default Orders;
+export default withErrorHandler(Orders, axios);
