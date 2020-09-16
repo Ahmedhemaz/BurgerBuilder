@@ -6,6 +6,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Form/Input/Input';
 import { withRouter } from 'react-router-dom';
 import createFormField from '../../../components/UI/Form/CreateFormField';
+import { connect } from 'react-redux';
 class ContactData extends Component {
     state = {
         orderForm: {
@@ -19,7 +20,7 @@ class ContactData extends Component {
                     { value: 'fastest', displayValue: 'Fastest' },
                     { value: 'cheapest', displayValue: 'Cheapest' },
                 ]
-            }, { required: true }, false),
+            }, { required: true }, true, false),
         },
         loading: false,
         formIsValid: false,
@@ -39,7 +40,7 @@ class ContactData extends Component {
         }
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price,
+            price: this.props.totalPrice,
             orderData: formData
         }
         axios.post('/orders.json', order)
@@ -103,4 +104,12 @@ class ContactData extends Component {
     }
 }
 
-export default withRouter(ContactData);
+
+const mapStoreStateToProps = state => {
+    return {
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice
+    }
+}
+
+export default connect(mapStoreStateToProps)(withRouter(ContactData));
