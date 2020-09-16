@@ -12,12 +12,6 @@ import axios from '../../axios-orders';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions';
 
-const INGREDIENTS_PRICING = {
-    salad: 0.5,
-    meat: 1.5,
-    bacon: .7,
-    cheese: 0.5
-}
 class BurgerBuilder extends Component {
 
     state = {
@@ -73,10 +67,10 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler() {
         const queryParams = [];
-        for (let i in this.state.ingredients) {
-            queryParams.push(encodeURIComponent(`${i}`) + '=' + encodeURIComponent(this.state.ingredients[i]))
+        for (let i in this.props.ingredients) {
+            queryParams.push(encodeURIComponent(`${i}`) + '=' + encodeURIComponent(this.props.ingredients[i]))
         }
-        queryParams.push('price=' + this.state.totalPrice);
+        queryParams.push('price=' + this.props.totalPrice);
         const queryString = queryParams.join('&');
         this.props.history.push({
             pathname: '/checkout',
@@ -99,13 +93,13 @@ class BurgerBuilder extends Component {
                         disableRemoveIngredientsInfo: disableRemoveIngredientsInfo
                     }}>
                         <BuildControls
-                            totalPrice={this.state.totalPrice}
+                            totalPrice={this.props.totalPrice}
                             ordered={() => this.purchaseHandler()}
                         />
                     </AddIngredientContext.Provider>
                 </Aux>
             )
-            orderSummary = <OrderSummary ingredients={this.props.ingredients} totalPrice={this.state.totalPrice} />;
+            orderSummary = <OrderSummary ingredients={this.props.ingredients} totalPrice={this.props.totalPrice} />;
         };
         if (this.state.loading) orderSummary = <Spinner />
         return (
@@ -131,7 +125,8 @@ class BurgerBuilder extends Component {
 
 const mapStoreStateToProps = state => {
     return {
-        ingredients: state.burgerBuilder.ingredients
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice
     }
 }
 

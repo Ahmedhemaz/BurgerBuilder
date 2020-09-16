@@ -4,8 +4,6 @@ import classes from './Burger.module.css';
 
 
 const burger = (props) => {
-    // console.log(props);
-    console.log(Object.keys(props.ingredients));
     let transFormedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
             return [...Array(props.ingredients[igKey])] // create array with size of ingredient value
