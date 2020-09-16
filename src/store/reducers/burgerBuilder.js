@@ -17,16 +17,16 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 ingredients: {
                     ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+                    [action.payload.ingredientName]: state.ingredients[action.payload.ingredientName] + 1
                 }
             }
         case actionTypes.REMOVE_INGREDIENT:
-            if (state.ingredients[action.ingredientName] === 0) return state;
+            if (state.ingredients[action.payload.ingredientName] === 0) return state;
             return {
                 ...state,
                 ingredients: {
                     ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
+                    [action.payload.ingredientName]: state.ingredients[action.payload.ingredientName] - 1
                 }
             }
 
