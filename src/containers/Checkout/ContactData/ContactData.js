@@ -45,12 +45,6 @@ class ContactData extends Component {
             orderData: formData
         }
         this.props.onPurchaseBurger(order);
-        // axios.post('/orders.json', order)
-        //     .then(response => {
-        //         this.setState({ loading: false });
-        //         this.props.history.replace('/');
-        //     })
-        //     .catch(error => this.setState({ loading: false }));
     }
 
     inputChangeHandler = (event, inputIdentifier) => {
