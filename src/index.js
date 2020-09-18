@@ -4,14 +4,29 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import BurgerBuilder from './store/reducers/burgerBuilder';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
+import BurgerBuilder from './store/reducers/burgerBuilder';
+import Orders from './store/reducers/order';
 const rootReducer = combineReducers({
   burgerBuilder: BurgerBuilder,
+  ordersState: Orders
 });
-const store = createStore(rootReducer);
+
+const logger = store => {
+  return next => {
+    return action => {
+      console.log('[Middleware Dispatching]', action);
+      next(action);
+      console.log('[Middleware next state]', store.getState());
+    }
+  }
+}
+
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)));
 
 ReactDOM.render(
   <React.StrictMode>
