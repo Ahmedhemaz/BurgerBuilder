@@ -15,47 +15,13 @@ import * as actionsCreator from '../../store/actions/index';
 class BurgerBuilder extends Component {
 
     state = {
-        totalPrice: 0,
         purchasing: false,
-        loading: false,
-        error: false
     }
 
     componentDidMount() {
-        // Promise.all([
-        //     axios.get('https://my-react-burger-2e14e.firebaseio.com/ingredients.json'),
-        //     axios.get('https://my-react-burger-2e14e.firebaseio.com/totalPrice.json')])
-        //     .then(values => {
-        //         this.setState({ ingredients: values[0].data, totalPrice: values[1].data })
-        //     })
-        //     .catch(() => this.setState({ error: true }));
-
+        this.props.onInitIngredients();
+        this.props.onInitTotalPrice();
     }
-
-    // addIngredientsHandler(type) {
-    //     const oldCount = this.state.ingredients[type];
-    //     const newCount = oldCount + 1;
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     }
-    //     updatedIngredients[type] = newCount;
-    //     const oldTotalPrice = this.state.totalPrice;
-    //     const newTotalPrice = oldTotalPrice + INGREDIENTS_PRICING[type];
-    //     this.setState({ ingredients: updatedIngredients, totalPrice: newTotalPrice });
-    // }
-
-    // removeIngredientHandler(type) {
-    //     const oldCount = this.state.ingredients[type];
-    //     if (oldCount === 0) return;
-    //     const newCount = oldCount - 1;
-    //     const updatedIngredients = {
-    //         ...this.state.ingredients
-    //     }
-    //     updatedIngredients[type] = newCount;
-    //     const oldTotalPrice = this.state.totalPrice;
-    //     const newTotalPrice = oldTotalPrice - INGREDIENTS_PRICING[type];
-    //     this.setState({ ingredients: updatedIngredients, totalPrice: newTotalPrice });
-    // }
 
     purchaseHandler() {
         this.setState({ purchasing: true });
@@ -67,23 +33,13 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler() {
         this.props.history.push('/checkout');
-        // const queryParams = [];
-        // for (let i in this.props.ingredients) {
-        //     queryParams.push(encodeURIComponent(`${i}`) + '=' + encodeURIComponent(this.props.ingredients[i]))
-        // }
-        // queryParams.push('price=' + this.props.totalPrice);
-        // const queryString = queryParams.join('&');
-        // this.props.history.push({
-        //     pathname: '/checkout',
-        //     search: '?' + queryString
-        // });
     }
 
     render() {
         const disableRemoveIngredientsInfo = { ...this.props.ingredients };
         let burger = null;
         let orderSummary = null
-        if (!this.props.ingredients) burger = this.state.error ? <p>ingredients can't be loaded</p> : <Spinner />
+        if (!this.props.ingredients) burger = this.props.error ? <p>ingredients can't be loaded</p> : <Spinner />
         if (this.props.ingredients) {
             burger = (
                 <Aux>
@@ -102,7 +58,7 @@ class BurgerBuilder extends Component {
             )
             orderSummary = <OrderSummary ingredients={this.props.ingredients} totalPrice={this.props.totalPrice} />;
         };
-        if (this.state.loading) orderSummary = <Spinner />
+        if (this.props.loading) orderSummary = <Spinner />
         return (
             <Aux>
                 { /**display modal on Order now click */
@@ -127,12 +83,16 @@ class BurgerBuilder extends Component {
 const mapStoreStateToProps = state => {
     return {
         ingredients: state.burgerBuilder.ingredients,
-        totalPrice: state.burgerBuilder.totalPrice
+        totalPrice: state.burgerBuilder.totalPrice,
+        loading: state.burgerBuilder.loading,
+        error: state.burgerBuilder.error
     }
 }
 
 const mapStoreDispatchToProps = dispatch => {
     return {
+        onInitIngredients: () => dispatch(actionsCreator.initIngredients()),
+        onInitTotalPrice: () => dispatch(actionsCreator.initTotalPrice()),
         onAddIngredient: (ingredientName) => dispatch(actionsCreator.addIngredient(ingredientName)),
         onRemoveIngredient: (ingredientName) => dispatch(actionsCreator.removeIngredient(ingredientName)),
     }
