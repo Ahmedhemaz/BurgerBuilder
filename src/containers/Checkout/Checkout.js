@@ -1,32 +1,10 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import CheckoutSummery from '../../components/Order/CheckoutSummery/CheckoutSummery';
 import ContactData from './ContactData/ContactData';
+import { connect } from 'react-redux';
+
 class Checkout extends Component {
-
-    state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            meat: 0,
-            chesse: 0
-        },
-        totalPrice: 0
-    }
-
-    componentDidMount() {
-        const query = new URLSearchParams(this.props.location.search);
-        const ingredients = {};
-        let price = 0;
-        for (let param of query.entries()) {
-            if (param[0] === 'price') {
-                price = param[1];
-            } else {
-                ingredients[param[0]] = +param[1];
-            }
-        }
-        this.setState({ ingredients, totalPrice: price });
-    }
 
     cancelHandler = () => {
         this.props.history.goBack();
@@ -37,18 +15,32 @@ class Checkout extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <CheckoutSummery
-                    ingredients={this.state.ingredients}
-                    cancelCalled={this.cancelHandler}
-                    continueCalled={this.continueHandler}
-                />
-                <Route path={this.props.match.path + '/contact-data'}
-                    render={() => (<ContactData ingredients={this.state.ingredients} price={this.state.totalPrice} />)} />
-            </div>
-        )
+        let summery = <Redirect to="/" />
+        if (this.props.ingredients) {
+            const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
+            summery = (
+                <Fragment>
+                    {purchasedRedirect}
+                    <CheckoutSummery
+                        ingredients={this.props.ingredients}
+                        cancelCalled={this.cancelHandler}
+                        continueCalled={this.continueHandler}
+                    />
+                    <Route path={this.props.match.path + '/contact-data'}
+                        component={ContactData} />
+                </Fragment>
+            )
+        }
+        return summery;
     }
 }
 
-export default Checkout;
+const mapStoreStateToProps = state => {
+    return {
+        ingredients: state.burgerBuilder.ingredients,
+        purchased: state.ordersState.purchased
+    }
+}
+
+
+export default connect(mapStoreStateToProps)(Checkout);

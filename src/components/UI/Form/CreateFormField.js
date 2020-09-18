@@ -1,11 +1,11 @@
 import ProtoTypes from 'prop-types';
-const createFormField = (elementtype, elementconfig, validation, shouldValidate = true, touched = false, value = '') => {
+const createFormField = (elementtype, elementconfig, validation, valid = false, shouldValidate = true, touched = false, value = '') => {
     return {
         elementtype,
         elementconfig,
         value,
         validation,
-        valid: false,
+        valid,
         shouldValidate,
         touched
     }
