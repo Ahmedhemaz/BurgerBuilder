@@ -9,6 +9,8 @@ import createFormField from '../../../components/UI/Form/CreateFormField';
 import { connect } from 'react-redux';
 import * as actionsCreator from '../../../store/actions/index';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import formInputChangeHandler from '../../../components/UI/Form/FormInputChangeHandler';
+
 class ContactData extends Component {
     state = {
         orderForm: {
@@ -27,11 +29,6 @@ class ContactData extends Component {
         formIsValid: false,
     }
 
-    checkValidity = (rules, value) => {
-        let isValid = false;
-        if (rules.required) isValid = value.trim() !== '';
-        return isValid;
-    }
     orderHandler = (event) => {
         event.preventDefault();
         this.setState({ loading: true });
@@ -48,25 +45,8 @@ class ContactData extends Component {
     }
 
     inputChangeHandler = (event, inputIdentifier) => {
-        // we need to change state with immutable way
-        /**
-         * 1- copy orderForm objects first level
-         * 2- copy formElement object using inputIDentifier
-         * 3- update formElement with target value
-         * 4- set that updatedFromElement to updatedOrderForm
-         * 5- update orderForm state with setstate of updatedOrderForm
-         */
-        const updatedOrderForm = { ...this.state.orderForm };
-        const updatedFormElement = { ...updatedOrderForm[inputIdentifier] }
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.validation, updatedFormElement.value);
-        updatedFormElement.touched = true;
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
-        let formIsValid = true;
-        for (let elementIdentifier in updatedOrderForm) {
-            formIsValid = updatedOrderForm[elementIdentifier].valid && formIsValid;
-        }
-        this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid })
+        const { updatedForm, formIsValid } = formInputChangeHandler(this.state.orderForm, event, inputIdentifier);
+        this.setState({ orderForm: updatedForm, formIsValid })
 
     }
 
