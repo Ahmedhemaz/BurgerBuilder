@@ -11,9 +11,11 @@ import thunk from 'redux-thunk';
 
 import BurgerBuilder from './store/reducers/burgerBuilder';
 import Orders from './store/reducers/order';
+import auth from './store/reducers/auth';
 const rootReducer = combineReducers({
   burgerBuilder: BurgerBuilder,
-  ordersState: Orders
+  ordersState: Orders,
+  auth
 });
 
 const logger = store => {

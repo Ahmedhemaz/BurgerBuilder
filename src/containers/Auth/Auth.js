@@ -6,6 +6,7 @@ import formInputChangeHandler from '../../components/UI/Form/FormInputChangeHand
 import classes from './Auth.module.css';
 import { connect } from 'react-redux';
 import * as actionsCreator from '../../store/actions/index';
+import Spinner from '../../components/UI/Spinner/Spinner';
 class Auth extends Component {
     state = {
         loginForm: {
@@ -61,14 +62,28 @@ class Auth extends Component {
             <Button disabled={!this.state.formIsValid} btnType="Success">{this.state.signUp ? 'SignUp' : 'SignIn'}</Button>
         </form>)
 
+        if (this.props.loading) form = <Spinner />;
+        let errorMessage = null;
+        if (this.props.error) errorMessage = this.props.error;
+
         return (
             <div className={classes.AuthData}>
                 {form}
+                <div>
+                    {errorMessage}
+                </div>
                 <Button clicked={this.switchAuthBtnHandler} btnType="Danger">
                     SWITCH TO {this.state.signUp ? 'SignIn' : 'SignUp'}
                 </Button>
             </div>
         )
+    }
+}
+
+const mapStoreStateToProps = state => {
+    return {
+        loading: state.auth.loading,
+        error: state.auth.error
     }
 }
 
@@ -79,4 +94,4 @@ const mapStoreDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapStoreDispatchToProps)(Auth);
+export default connect(mapStoreStateToProps, mapStoreDispatchToProps)(Auth);

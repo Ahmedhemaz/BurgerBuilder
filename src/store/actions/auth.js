@@ -60,7 +60,7 @@ export const authenticate = (authData) => {
                 dispatch(authSuccess(response.data));
             })
             .catch(error => {
-                dispatch(authFailure(error))
+                dispatch(authFailure(error.response.data))
             })
     }
 }
