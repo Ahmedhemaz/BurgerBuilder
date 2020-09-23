@@ -83,3 +83,10 @@ export const authenticate = (authData) => {
             })
     }
 }
+
+export const setAuthRedirectPath = (payload) => {
+    return {
+        type: actionTypes.SET_AUTH_REDIRECT_PATH,
+        payload
+    }
+}

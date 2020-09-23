@@ -17,6 +17,12 @@ class Auth extends Component {
         signUp: true
     }
 
+    componentDidMount() {
+        if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
+            this.props.onSetAuthRedirectPath();
+        }
+    }
+
     inputChangeHandler = (event, inputIdentifier) => {
         const { updatedForm, formIsValid } = formInputChangeHandler(this.state.loginForm, event, inputIdentifier);
         this.setState({ loginForm: updatedForm, formIsValid })
@@ -68,7 +74,8 @@ class Auth extends Component {
         if (this.props.error) errorMessage = this.props.error;
         // todo Redirect After Signin or Signup
         // todo refresh a Firebase ID token by issuing an HTTP POST request to the securetoken.googleapis.com endpoint .
-        const authRedirect = <Redirect to="/" />;
+
+        const authRedirect = <Redirect to={this.props.authRedirectPath} />;
         return (
             <div className={classes.AuthData}>
                 {this.props.authToken ? authRedirect : null}
@@ -88,14 +95,17 @@ const mapStoreStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
-        authToken: state.auth.token
+        authToken: state.auth.token,
+        buildingBurger: state.burgerBuilder.building,
+        authRedirectPath: state.auth.authRedirectPath,
     }
 }
 
 const mapStoreDispatchToProps = dispatch => {
     return {
         onAuth: (authData) => dispatch(actionsCreator.authenticate(authData)),
-        onSignUp: (signUpData) => dispatch(actionsCreator.signUp(signUpData))
+        onSignUp: (signUpData) => dispatch(actionsCreator.signUp(signUpData)),
+        onSetAuthRedirectPath: () => dispatch(actionsCreator.setAuthRedirectPath({ path: '/' }))
     }
 }
 

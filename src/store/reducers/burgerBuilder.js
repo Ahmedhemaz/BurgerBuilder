@@ -5,7 +5,8 @@ const initialState = {
     ingredients: null,
     totalPrice: 0,
     error: false,
-    loading: true
+    loading: true,
+    building: false
 }
 
 const INGREDIENTS_PRICING = {
@@ -29,7 +30,8 @@ const addIngredientUpdatedState = (state, action) => {
     const updatedIngredients = updateObject(state.ingredients, updatedIngredient);
     const updatedState = updateObject(state, {
         ingredients: updatedIngredients,
-        totalPrice: state.totalPrice + INGREDIENTS_PRICING[action.payload.ingredientName]
+        totalPrice: state.totalPrice + INGREDIENTS_PRICING[action.payload.ingredientName],
+        building: true
     });
     return updatedState;
 }
@@ -40,7 +42,8 @@ const removeIngredientUpdatedState = (state, action) => {
     const updatedIngredients = updateObject(state.ingredients, updatedIngredient);
     const updatedState = updateObject(state, {
         ingredients: updatedIngredients,
-        totalPrice: state.totalPrice - INGREDIENTS_PRICING[action.payload.ingredientName]
+        totalPrice: state.totalPrice - INGREDIENTS_PRICING[action.payload.ingredientName],
+        building: true
     });
     return updatedState;
 }
@@ -48,7 +51,7 @@ const removeIngredientUpdatedState = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_INGREDIENTS: return updateObject(state, { ingredients: reorderFetchedIngredients(action), loading: false })
+        case actionTypes.SET_INGREDIENTS: return updateObject(state, { ingredients: reorderFetchedIngredients(action), loading: false, building: false })
         case actionTypes.FETCH_INGREDIENTS_FAILURE: return updateObject(state, { error: true, loading: false })
         case actionTypes.SET_TOTAL_PRICE: return updateObject(state, { totalPrice: action.payload.response, loading: false })
         case actionTypes.FETCH_TOTAL_PRICE_FAILURE: return updateObject(state, { error: true, loading: false })
