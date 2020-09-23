@@ -7,6 +7,7 @@ import classes from './Auth.module.css';
 import { connect } from 'react-redux';
 import * as actionsCreator from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import { Redirect } from 'react-router-dom';
 class Auth extends Component {
     state = {
         loginForm: {
@@ -67,8 +68,10 @@ class Auth extends Component {
         if (this.props.error) errorMessage = this.props.error;
         // todo Redirect After Signin or Signup
         // todo refresh a Firebase ID token by issuing an HTTP POST request to the securetoken.googleapis.com endpoint .
+        const authRedirect = <Redirect to="/" />;
         return (
             <div className={classes.AuthData}>
+                {this.props.authToken ? authRedirect : null}
                 {form}
                 <div>
                     {errorMessage}
@@ -84,7 +87,8 @@ class Auth extends Component {
 const mapStoreStateToProps = state => {
     return {
         loading: state.auth.loading,
-        error: state.auth.error
+        error: state.auth.error,
+        authToken: state.auth.token
     }
 }
 
