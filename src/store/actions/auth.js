@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import { API_KEY } from '../../apiKey';
 import axios from 'axios';
+
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
@@ -48,10 +49,11 @@ export const signUp = (signUpData) => {
                 dispatch(signUpSuccess(response.data));
             })
             .catch(error => {
-                dispatch(signUpFailure(error))
+                dispatch(signUpFailure(error.response.data))
             })
     }
 }
+
 export const authenticate = (authData) => {
     return dispatch => {
         dispatch(authStart());

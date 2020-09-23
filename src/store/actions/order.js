@@ -15,10 +15,10 @@ export const fetchOrdersError = (payload) => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (authToken) => {
 
     return dispatch => {
-        axios.get('/orders.json')
+        axios.get(`/orders.json?auth=${authToken}`)
             .then(response => {
                 dispatch(loadOrders({ response: response.data }))
             })

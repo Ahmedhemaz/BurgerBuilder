@@ -30,7 +30,6 @@ const signUpStart = (state) => {
 }
 
 const signUpSuccess = (state, action) => {
-    console.log(action);
     return updateObject(state, {
         token: action.payload.idToken,
         userId: action.payload.localId,
