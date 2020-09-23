@@ -21,3 +21,5 @@ export const AUTH_FAILURE = 'AUTH_FAILURE';
 export const SIGNUP_START = 'SIGNUP_START';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
+
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';

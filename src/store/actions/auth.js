@@ -66,3 +66,9 @@ export const authenticate = (authData) => {
             })
     }
 }
+
+export const logout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    }
+}

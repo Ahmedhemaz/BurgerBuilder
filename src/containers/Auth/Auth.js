@@ -65,7 +65,8 @@ class Auth extends Component {
         if (this.props.loading) form = <Spinner />;
         let errorMessage = null;
         if (this.props.error) errorMessage = this.props.error;
-
+        // todo Redirect After Signin or Signup
+        // todo refresh a Firebase ID token by issuing an HTTP POST request to the securetoken.googleapis.com endpoint .
         return (
             <div className={classes.AuthData}>
                 {form}

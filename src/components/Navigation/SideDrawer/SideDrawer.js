@@ -5,17 +5,17 @@ import classes from './SideDrawer.module.css';
 import BackDrop from '../../UI/Backdrop/Backdrop';
 import Aux from '../../../hoc/Aux/Aux';
 
-const sideDrawer = (props)=> {
-    const attachedClasses = props.open ?  [classes.SideDrawer, classes.Open]: [classes.SideDrawer, classes.Close] ;
+const sideDrawer = (props) => {
+    const attachedClasses = props.open ? [classes.SideDrawer, classes.Open] : [classes.SideDrawer, classes.Close];
     return (
         <Aux>
-            <BackDrop show={props.open}/>
-            <div className = {attachedClasses.join(' ')}>
+            <BackDrop show={props.open} />
+            <div className={attachedClasses.join(' ')}>
                 <div className={classes.Logo}>
-                    <Logo/>
+                    <Logo />
                 </div>
                 <nav>
-                    <NavigationItems/>
+                    <NavigationItems isAuthenticated={props.isAuth} />
                 </nav>
             </div>
         </Aux>

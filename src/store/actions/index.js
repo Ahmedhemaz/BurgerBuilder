@@ -2,4 +2,4 @@ export { fetchOrders, loadOrders, purchaseBurger, purchaseBurgerInit } from './o
 
 export { addIngredient, removeIngredient, initIngredients, initTotalPrice } from './burgerBuilder'
 
-export { authStart, authSuccess, authFailure, authenticate, signUp } from './auth'
+export { authenticate, signUp, logout } from './auth'
